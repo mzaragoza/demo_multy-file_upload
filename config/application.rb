@@ -8,8 +8,18 @@ Bundler.require(*Rails.groups)
 
 module DemoMuliyFileUpload
   class Application < Rails::Application
+
+    require 'carrierwave'
+    require 'carrierwave/orm/activerecord'
+    include ActionView::Helpers::DateHelper
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration should go into files in config/initializers
     # -- all .rb files in that directory are automatically loaded.
-  end
+    config.before_initialize do
+      dev = File.join(Rails.root, 'config', 'config.yml')
+      YAML.load(File.open(dev)).each do |key,value|
+      ENV[key.to_s] = value
+      end if File.exists?(dev)
+    end
+ end
 end
